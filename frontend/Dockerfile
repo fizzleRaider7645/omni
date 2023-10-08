@@ -1,20 +1,12 @@
-# Use an official Node.js runtime as the base image
-FROM node:16
+# Step 1: Build the React application
+FROM node:16 AS build
 
-# Set the working directory inside the container
 WORKDIR /app
-
-# Copy the package.json and package-lock.json first to leverage Docker caching
 COPY package*.json ./
-
-# Install the application's dependencies
 RUN npm install
+COPY . ./
+RUN npm run build
 
-# Copy the rest of the application source
-COPY . .
-
-# The default port Vite uses is 3000, so let's expose it
-EXPOSE 3000
-
-# Define the command to run the application
+# Start the Vite server
 CMD ["npm", "run", "dev"]
+EXPOSE 5173
